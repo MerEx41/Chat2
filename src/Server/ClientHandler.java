@@ -28,10 +28,15 @@ public class ClientHandler {
                             String[] tokens = str.split(" ");
                             String nick = AuthService.getNicknameByLoginAndPassword(tokens[1], tokens[2]);
                             if (nick != null) {
-                                sendMsg("/auth-OK");
-                                setNickname(nick);
-                                server.subscribe(ClientHandler.this);
-                                break;
+                                if (!server.isUserLogIn(nickname)){
+                                    sendMsg("/auth-OK");
+                                    setNickname(nick);
+                                    server.subscribe(ClientHandler.this);
+                                    break;
+                                } else {
+                                    sendMsg("User already log in. Use another login.");
+                                }
+
                             } else {
                                 sendMsg("Wrong login/password");
                             }
@@ -44,6 +49,9 @@ public class ClientHandler {
                             out.writeUTF("/serverClosed");
                             System.out.printf("Client [%s] disconnected\n", socket.getInetAddress());
                             break;
+                        } else if (str.startsWith("@"){
+                            String [] tokens = str.split(" ", 2);
+                            server.sendPrivate(this.nickname,tokens[0].substring(1, tokens[0].length()), tokens[1]);
                         }
                         System.out.printf("Client [%s] - %s\n", socket.getInetAddress(), str);
                         server.broadcastMessage(nickname + ": " + str);
@@ -76,6 +84,10 @@ public class ClientHandler {
 
     private void setNickname(String nick) {
         this.nickname = nick;
+    }
+
+    public String getNickname() {
+        return nickname;
     }
 
     public void sendMsg(String msg) {

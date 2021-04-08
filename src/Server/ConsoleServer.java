@@ -55,4 +55,22 @@ public class ConsoleServer {
 
             }
         }
+
+        public boolean isUserLogIn (String nickname){
+            for (ClientHandler c: users) {
+                if (c.getNickname().equals(nickname)){
+                    return true;
+                }
+            }
+            return false;
+        }
+
+    public void sendPrivate(String nicknameFrom, String nicknameTo, String str) {
+        for (ClientHandler c: users) {
+            if (c.getNickname().equals(nicknameTo)){
+                c.sendMsg(nicknameFrom + " to you: " + str);
+                c.sendMsg(nicknameFrom + " to " + nicknameTo + " " + str);
+            }
+        }
     }
+}
