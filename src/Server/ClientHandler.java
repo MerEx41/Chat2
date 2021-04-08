@@ -22,7 +22,6 @@ public class ClientHandler {
 
             new Thread(() -> {
                 try {
-                    // auth - /auth login pass
                     while (true) {
                         String str = in.readUTF();
                         if (str.startsWith("/auth ")) {
