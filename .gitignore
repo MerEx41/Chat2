@@ -1,0 +1,7 @@
+/.idea
+/tools
+/out
+/in
+.gitignore
+.gitattributes
+Chat.iml
